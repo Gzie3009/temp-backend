@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
  cors({
-  origin:"https://ikonikbez.vercel.app/", 
+  origin:"https://ikonikbez.vercel.app", 
   credentials:true
  })
 ); 
