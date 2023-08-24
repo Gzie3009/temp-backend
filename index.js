@@ -8,6 +8,7 @@ const orderRoutes = require("./routes/OrderRoutes");
 const clouldinaryConnect = require("./config/Cloudinary");
 const fileUpload = require("express-fileupload");
 const blogRoutes = require("./routes/BlogRoutes");
+const contactRouter = require("./routes/ContactRouter");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -44,6 +45,7 @@ app.use("/api/v1/auth", entryRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/blogs", blogRoutes);
+app.use("/api/v1/contact", contactRouter);
 app.listen(process.env.PORT, () => {
   console.log("Server started succesfully");
 });
