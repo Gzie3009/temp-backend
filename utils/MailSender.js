@@ -16,7 +16,7 @@ const MailSender = async (email,title , body)=>{
     to: `${email}`, 
     from:`Ecommerce - wictronix-karansehgal`, 
     subject:`${title}`, 
-    html : `${body}`
+    html : body
    }); 
    return info;
  }
