@@ -118,14 +118,7 @@ const sendOtp = async( req , res)=>{
       email, 
       otp
    });
-   const body=`<!DOCTYPE html>
-   <html lang="en">
-   
-   <head>
-     <meta charset="UTF-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   </head>
-   <body>
+   const body=`
    <div style="font-family: Helvetica,Arial,sans-serif;min-width:320px;max-width:100%;overflow:auto;line-height:2;background-color:#FEF0DC">
      <div style="margin:50px auto;max-width:90%;padding:20px 0">
        <div style="border-bottom:1px solid #eee">
@@ -142,10 +135,7 @@ const sendOtp = async( req , res)=>{
          <p>India</p>
        </div>
      </div>
-   </div>
-   </body>
-   
-   </html>`
+   </div>`
    await MailSender(process.env.USER,"Witronix powered", body);
    return res.status(200).json({
       success:true, 
