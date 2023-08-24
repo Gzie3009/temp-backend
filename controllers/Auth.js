@@ -121,8 +121,8 @@ const sendOtp = async (req, res) => {
     "../utils/mail.html",
     "utf8"
   );
-  const customizedEmailContent = emailTemplate.replace('{{OTP}}', otp);
-  await MailSender(process.env.USER, "Witronix powered", customizedEmailContent);
+  const customizedEmailContent = emailTemplate.replace('{{OTP}}', otpDetails.otp);
+  await MailSender(otpDetails.email, "Witronix powered", customizedEmailContent);
   return res.status(200).json({
     success: true,
     message: "Otp sent succesfullty",
