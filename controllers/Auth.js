@@ -98,7 +98,7 @@ const logIn = async (req, res) => {
 const sendOtp = async( req , res)=>{
         
    const{email} = req.body; 
-   const userDetails = userModel.findOne({email}); 
+   const userDetails = await userModel.findOne({email}); 
    // console.log(userDetails)
    // if(userDetails)
    // {
@@ -118,7 +118,36 @@ const sendOtp = async( req , res)=>{
       email, 
       otp
    });
-   await MailSender(process.env.USER,"Witronix powered", otp);
+   const body=`<!DOCTYPE html>
+   <html lang="en">
+   
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link rel="stylesheet" href="style.css" />
+     <title>Browser</title>
+   </head>
+   <div style="font-family: Helvetica,Arial,sans-serif;min-width:320px;max-width:100%;overflow:auto;line-height:2;background-color:#FEF0DC">
+     <div style="margin:50px auto;max-width:90%;padding:20px 0">
+       <div style="border-bottom:1px solid #eee">
+         <a href="www.ikonikbez.com" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">IKONIKBEZ</a>
+       </div>
+       <p style="font-size:1.1em">Hi,</p>
+       <p>Thank you for choosing Ikonikbez . Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes</p>
+       <h2 style="background: #6D282C;margin: 0 auto;width:fit-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
+       <p style="font-size:0.9em;">Regards,<br /><a href="www.ikonikbez.com">IKONIKBEZ</a>
+   </p>
+       <hr style="border:none;border-top:1px solid #eee" />
+       <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+         <p>Ikonikbez Pvt, Ltd.</p>
+         <p>India</p>
+       </div>
+     </div>
+   </div>
+   </body>
+   
+   </html>`
+   await MailSender(process.env.USER,"Witronix powered", body);
    return res.status(200).json({
       success:true, 
       message:"Otp sent succesfullty"
