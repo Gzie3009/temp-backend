@@ -1,37 +1,47 @@
-const express = require("express"); 
+const express = require("express");
 const dbConnect = require("./config/DbConnection");
-const app = express(); 
-const entryRoutes= require("./routes/EntryRoutes");
-const cookieParser = require("cookie-parser"); 
-const productRoutes = require("./routes/ProductRoutes"); 
+const app = express();
+const entryRoutes = require("./routes/EntryRoutes");
+const cookieParser = require("cookie-parser");
+const productRoutes = require("./routes/ProductRoutes");
 const orderRoutes = require("./routes/OrderRoutes");
-const  clouldinaryConnect = require("./config/Cloudinary"); 
+const clouldinaryConnect = require("./config/Cloudinary");
 const fileUpload = require("express-fileupload");
 const blogRoutes = require("./routes/BlogRoutes");
-const cors = require("cors"); 
+const cors = require("cors");
 
-
-require("dotenv").config(); 
-app.use(express.json()); 
+require("dotenv").config();
+app.use(express.json());
 app.use(cookieParser());
-app.use(
- cors({
-  origin:"https://ikonikbez.vercel.app", 
-  credentials:true
- })
-); 
-app.use(fileUpload({
- useTempFiles:true, 
- tempFileDir:"/tmp"
-}))
-dbConnect(); 
-clouldinaryConnect();
-app.use("/api/v1/auth",entryRoutes);
-app.use("/api/v1/product",productRoutes);
-app.use("/api/v1/order",orderRoutes);
-app.use("/api/v1/blogs",blogRoutes);
-app.listen(process.env.PORT,()=>{
- console.log("Server started succesfully"); 
-})
+const allowedOrigins = [
+  "https://ikonikbez.vercel.app",
+  "http://localhost:3000",
+];
 
- 
+cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+});
+
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp",
+  })
+);
+dbConnect();
+clouldinaryConnect();
+app.use("/api/v1/auth", entryRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/blogs", blogRoutes);
+app.listen(process.env.PORT, () => {
+  console.log("Server started succesfully");
+});
