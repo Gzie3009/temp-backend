@@ -124,8 +124,6 @@ const sendOtp = async( req , res)=>{
    <head>
      <meta charset="UTF-8" />
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <link rel="stylesheet" href="style.css" />
-     <title>Browser</title>
    </head>
    <div style="font-family: Helvetica,Arial,sans-serif;min-width:320px;max-width:100%;overflow:auto;line-height:2;background-color:#FEF0DC">
      <div style="margin:50px auto;max-width:90%;padding:20px 0">
