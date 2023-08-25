@@ -8,7 +8,7 @@ exports.createContact = async( req , res)=>{
         const{email , mobile ,name , message} = req.body ; 
 
 
-        if(!email || !mobile || !message){
+        if(!email || !message){
             return res.status(404).json({
                 success: true, 
                 message:"fill the details "
