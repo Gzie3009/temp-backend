@@ -9,8 +9,6 @@ const {uploadImagetoCloudinary} = require("../utils/ImageUploader");
 // exports.checkCart = async(req , res) =>{
 //   try{
 //       const Id = req.body ;
-
-
 //   }
 //   catch(err){
 //     console.log(err);
@@ -89,7 +87,6 @@ exports.getAllProducts = async (req, res) => {
     });
   }
 };
-//TODO :  add photo of product
 
 // like a product
 exports.likeProduct = async (req, res) => {
@@ -599,9 +596,7 @@ exports.deleteCategory = async (req, res) => {
     });
   }
 };
-
 // list all the product of a category
-
 exports.allProductsOfCategory = async (req, res) => {
   try {
     const { categoryId } = req.body;
@@ -632,6 +627,11 @@ exports.getProduct = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("photos");
+    const categoryId = product.category ;
+    const relatedProducts = await Product.find({
+      category: categoryId,
+    });
+
     const cartItemFound = await CartItem.findOne({ productId: id });
     const userId = req.user.id;
 
@@ -645,6 +645,7 @@ exports.getProduct = async (req, res) => {
         success: true,
         message: "Product Found successfully",
         product,
+        relatedProducts,
         cartItemFound: false,
       });
     }
@@ -672,10 +673,16 @@ exports.getProductWithoutAuth = async (req, res) => {
         message: "no product found",
       });
     }
+    const categoryId = product.category ;
+    const relatedProducts = await Product.find({
+      category: categoryId,
+    });
+
     return res.status(200).json({
       success: true,
       message: "fetched",
       product,
+      relatedProducts
     });
   } catch (e) {
     console.log(e.message);
