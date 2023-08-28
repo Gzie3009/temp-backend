@@ -135,10 +135,42 @@ exports.addAddressToOrder = async( req, res)=>{
 
 exports.placeOrder = async( req , res)=>{
  
+ // check out payment intiated 
 
 }
 
+exports.getMyOrders = async( req, res)=>{
+     try{
+        
+      const id = req.user.id;
+      
+      const Details =   await User.findById(id).populate("orders"); 
+
+      if(!Details)
+      {
+        return res.status(404).json({
+          success:false, 
+          message:" Error while fetching the orders"
+        })
+      }
+
+      return res.status(200).json({
+        success: true,
+        message:" get my orders", 
+        Details
+      })
+   
+     }
+     catch(err){
+      console.log(err); 
+      return res.status(500).json({
+        success: false , 
+        message:"Error while fetching orders"
+      })
+     }
+}
 exports.getOrderDeatils = async(req, res)=>{
+  // all orders
  try{
      const {orderId} = req.body; 
      const orderDetails = await Order.findById(orderId).populate("user").populate("products").populate("address").exec(); 

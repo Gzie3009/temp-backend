@@ -25,6 +25,7 @@ const {
   searchProduct,
   removeFromWishlist,
   getProductWithoutAuth,
+  filter
 } = require("../controllers/Product");
 router.post("/add-product", auth, addProduct); //checked
 router.post("/add-category", auth, addCategory); // checked
@@ -49,4 +50,6 @@ router.post("/decrease/:id", decreaseQuantity);
 router.post("/search/:key", searchProduct);
 router.post("/remove-from-wishlist/:id", auth, removeFromWishlist);
 router.post("/no-auth/:id", getProductWithoutAuth);
+router.post("/filter",filter);
+
 module.exports = router;

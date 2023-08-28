@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema ({
       },  
       products:[{
        type:mongoose.Schema.Types.ObjectId, 
-       ref:"Product", 
+       ref:"CartItem", 
       }],
       address:{
        type:mongoose.Schema.Types.ObjectId, 
@@ -14,6 +14,7 @@ const orderSchema = new mongoose.Schema ({
       },
       amount:{
          type:Number, 
+         default:0
       }
 })
 

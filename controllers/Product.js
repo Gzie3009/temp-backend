@@ -746,3 +746,33 @@ exports.removeFromWishlist = async (req, res) => {
     });
   }
 };
+
+exports.filter = async (req, res)=>{
+  try{
+    const {fabric , collection , auction, material , title} = req.body ; 
+    let filter = {}; 
+    if( fabric)
+    {
+      filter.fabric = new RegExp(fabric, 'i');
+    }
+    if(collection){
+      filter.collection =new RegExp(collection, 'i'); 
+    }
+    if(auction){
+      filter.auction = new RegExp(auction ,'i'); 
+    }
+    const products = await Product.find(filter);
+    return res.json({
+      success:true, 
+      message:"Product Founded", 
+      products
+    }) ; 
+  }
+  catch(err){
+    console.log(err); 
+    res.status(500).json({
+       success:false , 
+       message:"error while applying filter"
+    })
+  }
+} 
