@@ -3,8 +3,7 @@ const Category = require("../models/Category");
 const User = require("../models/User");
 const CartItem = require("../models/CartItem");
 const ImageColor = require("../models/ImageColor");
-const {uploadImagetoCloudinary} = require("../utils/ImageUploader");
-
+const { uploadImagetoCloudinary } = require("../utils/ImageUploader");
 
 // exports.checkCart = async(req , res) =>{
 //   try{
@@ -19,10 +18,8 @@ const {uploadImagetoCloudinary} = require("../utils/ImageUploader");
 //   }
 // }
 
-
 // add product
 exports.addProduct = async (req, res) => {
-
   try {
     const { name, description, category, price, offerprice, status } = req.body;
     const userId = req.user.id;
@@ -627,7 +624,7 @@ exports.getProduct = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("photos");
-    const categoryId = product.category ;
+    const categoryId = product.category;
     const relatedProducts = await Product.find({
       category: categoryId,
     });
@@ -641,12 +638,16 @@ exports.getProduct = async (req, res) => {
         message: "no product found",
       });
     } else if (!cartItemFound) {
+      const relatedProducts = await Product.find({
+        category: categoryId,
+      });
       return res.status(200).json({
         success: true,
         message: "Product Found successfully",
         product,
         relatedProducts,
         cartItemFound: false,
+        relatedProducts
       });
     }
 
@@ -673,7 +674,7 @@ exports.getProductWithoutAuth = async (req, res) => {
         message: "no product found",
       });
     }
-    const categoryId = product.category ;
+    const categoryId = product.category;
     const relatedProducts = await Product.find({
       category: categoryId,
     });
@@ -682,7 +683,7 @@ exports.getProductWithoutAuth = async (req, res) => {
       success: true,
       message: "fetched",
       product,
-      relatedProducts
+      relatedProducts,
     });
   } catch (e) {
     console.log(e.message);
@@ -747,32 +748,30 @@ exports.removeFromWishlist = async (req, res) => {
   }
 };
 
-exports.filter = async (req, res)=>{
-  try{
-    const {fabric , collection , auction, material , title} = req.body ; 
-    let filter = {}; 
-    if( fabric)
-    {
-      filter.fabric = new RegExp(fabric, 'i');
+exports.filter = async (req, res) => {
+  try {
+    const { fabric, collection, auction, material, title } = req.body;
+    let filter = {};
+    if (fabric) {
+      filter.fabric = new RegExp(fabric, "i");
     }
-    if(collection){
-      filter.collection =new RegExp(collection, 'i'); 
+    if (collection) {
+      filter.collection = new RegExp(collection, "i");
     }
-    if(auction){
-      filter.auction = new RegExp(auction ,'i'); 
+    if (auction) {
+      filter.auction = new RegExp(auction, "i");
     }
     const products = await Product.find(filter);
     return res.json({
-      success:true, 
-      message:"Product Founded", 
-      products
-    }) ; 
-  }
-  catch(err){
-    console.log(err); 
+      success: true,
+      message: "Product Founded",
+      products,
+    });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({
-       success:false , 
-       message:"error while applying filter"
-    })
+      success: false,
+      message: "error while applying filter",
+    });
   }
-} 
+};
