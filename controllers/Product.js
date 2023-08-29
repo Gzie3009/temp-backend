@@ -638,16 +638,13 @@ exports.getProduct = async (req, res) => {
         message: "no product found",
       });
     } else if (!cartItemFound) {
-      const relatedProducts = await Product.find({
-        category: categoryId,
-      });
       return res.status(200).json({
         success: true,
         message: "Product Found successfully",
         product,
         relatedProducts,
         cartItemFound: false,
-        relatedProducts
+        relatedProducts,
       });
     }
 
@@ -658,6 +655,7 @@ exports.getProduct = async (req, res) => {
       message: "Product Found successfully",
       product,
       cartItemFound: check,
+      relatedProducts
     });
   } catch (e) {
     console.log(e.message);
