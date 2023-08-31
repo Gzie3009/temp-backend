@@ -15,6 +15,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cookieParser());
 const allowedOrigins = [
+  "https://ikonikbez.com",
   "https://ikonikbez.vercel.app",
   "http://localhost:3000",
 ];
