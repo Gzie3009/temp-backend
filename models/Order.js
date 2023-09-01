@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema ({
       },  
       products:[{
        type:mongoose.Schema.Types.ObjectId, 
-       ref:"CartItem", 
+       ref:"OrderItem", 
       }],
       address:{
        type:mongoose.Schema.Types.ObjectId, 
@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema ({
          type:Number, 
          default:0
       }
-})
+      
+},  {timestamps : true})
 
 module.exports = mongoose.model("Order", orderSchema);

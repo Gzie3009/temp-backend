@@ -781,7 +781,7 @@ exports.filter = async (req, res) => {
     const { fabric, collection, auction, material, title } = req.body;
     let filter = {};
     if (fabric) {
-      filter.fabric = new RegExp(fabric, "i");
+      filter.fabric = fabric;
     }
     if (collection) {
       filter.collection = new RegExp(collection, "i");
@@ -789,7 +789,9 @@ exports.filter = async (req, res) => {
     if (auction) {
       filter.auction = new RegExp(auction, "i");
     }
-    const products = await Product.find(filter);
+    console.log('Filter object before query:', filter);
+
+const products = await Product.find(filter);
     return res.json({
       success: true,
       message: "Product Founded",

@@ -77,3 +77,14 @@ Type of Request   Path , purpose
 Post, /contact-form, to create the enquiry posted in db 
 Post,  /get-contact, to get all the posted enquiries  
 
+
+
+--------
+Pending Work backend 
+filter 
+profile handle 
+
+
+Integrations 
+shipYarri 
+phonepe
