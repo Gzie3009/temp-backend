@@ -21,7 +21,7 @@ const { uploadImagetoCloudinary } = require("../utils/ImageUploader");
 // add product
 exports.addProduct = async (req, res) => {
   try {
-    const { name, description, category, price, offerprice, status } = req.body;
+    const { name, description, category, price, offerprice, status} = req.body;
     const userId = req.user.id;
     console.log(userId);
     availble = true;
@@ -231,8 +231,18 @@ exports.putImage = async (req, res) => {
   try {
     const { productId, color } = req.body;
     const image = req.files.productImage;
+
+    const productDetails = await Product.findById(productId); 
+    if(!productDetails)
+    {
+      return res.status(404).json({
+        success:false , 
+        message:"No such product Found"
+      })
+    }
     const imageUpload = await uploadImagetoCloudinary(image);
     const url = imageUpload.secure_url;
+
     const ImageSaved = await ImageColor.create({ url, color, productId });
     const dbEntry = await Product.findByIdAndUpdate(productId, {
       $push: { photos: ImageSaved._id },
@@ -276,14 +286,23 @@ exports.addToCart = async (req, res) => {
 
     const { productId, customization, colorImg, quantity } = req.body;
     // validate the product
-    if (!productId) {
+    
+    const productDetails = await Product.findById(productId);
+    if (!productId|| !productDetails) {
       return res.status(404).json({
         success: false,
         message: "No product found",
       });
     }
+    const imgColor = await ImageColor.findById(colorImg); 
+    if(!imgColor){
+      return res.status(500).json({
+        success:false , 
+        message:"No such color of image found"
+      })
+    }
     const findUser = await User.findById(userId);
-
+// here i am checking for the cartitem id and sending the product id bug
     if (findUser.mycart.includes(productId)) {
       return res.status(200).json({
         success: true,
@@ -309,7 +328,7 @@ exports.addToCart = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "added to cart",
-      dat: updatedUser,
+      data: updatedUser,
     });
   } catch (err) {
     console.log(err);
@@ -359,6 +378,7 @@ exports.getCart = async (req, res) => {
   try {
     //push the product id to the cart of the user so we also need the user id
     const userId = req.user.id;
+
 
     const CartDetails1 = await User.findById(userId).populate([
       {
@@ -478,8 +498,16 @@ exports.addToWishlist = async (req, res) => {
     const { productId } = req.body;
     const userId = req.user.id;
     console.log(userId);
+    const product = await Product.findById(productId); 
+    if(!product)
+    {
+      return res.status(500).json({
+        success:false , 
+        message:"No Such Product Found"
+      })
+    }
     const findUser = await User.findById(userId);
-
+    
     if (findUser.wishlist.includes(productId)) {
       return res.status(200).json({
         success: true,
@@ -627,8 +655,11 @@ exports.getProduct = async (req, res) => {
     const categoryId = product.category;
     const relatedProducts = await Product.find({
       category: categoryId,
-    });
+    }).populate("photos");
 
+    const relatedProductWithoutCurrent =  relatedProducts.filter((element)=>{
+     return  element._id != id ;
+    }) ; 
     const cartItemFound = await CartItem.findOne({ productId: id });
     const userId = req.user.id;
 
@@ -642,9 +673,8 @@ exports.getProduct = async (req, res) => {
         success: true,
         message: "Product Found successfully",
         product,
-        relatedProducts,
         cartItemFound: false,
-        relatedProducts,
+        buytogether:relatedProductWithoutCurrent,
       });
     }
 
@@ -655,7 +685,7 @@ exports.getProduct = async (req, res) => {
       message: "Product Found successfully",
       product,
       cartItemFound: check,
-      relatedProducts
+      buytogether:relatedProductWithoutCurrent,
     });
   } catch (e) {
     console.log(e.message);
