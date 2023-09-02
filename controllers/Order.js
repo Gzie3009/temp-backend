@@ -48,10 +48,12 @@ exports.createOrder = async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(userId, {
         $push: { orders: orderUpdated._id }
       })
+      const order = await Order.findById(orderCreated._id).populate("products"); 
+       
       return res.status(200).json({
         success: true,
         message: "Product added Succesfully",
-        orderUpdated,
+        order,
       })
     }
     else {
@@ -87,6 +89,7 @@ exports.createOrder = async (req, res) => {
           quantity
         });
         console.log(orderItemCreated._id);
+
         const orderUpdated = await Order.findByIdAndUpdate(orderCreated._id,
           { $push: { products: orderItemCreated._id } }, {
           new: true
@@ -101,10 +104,11 @@ exports.createOrder = async (req, res) => {
       const orderUpdate = await Order.findByIdAndUpdate(orderCreated._id,{
         amount:price
       });
+      const order = await Order.findById(orderCreated._id).populate("products"); 
       return res.status(200).json({
         success: true,
         message: "all product added successfully",
-        orderCreated
+        order
       })
 
     }
