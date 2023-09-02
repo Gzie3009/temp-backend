@@ -156,7 +156,7 @@ exports.getOrders = async (req, res) => {
 exports.addAddress = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, city, state, country, streetAndHouseNo } = req.body;
+    const { name, contact, city, state, country, streetAndHouseNo } = req.body;
     const existedAdress = await Address.findOne({ name: name });
     if (existedAdress) {
       return res.status(500).json({
@@ -169,6 +169,7 @@ exports.addAddress = async (req, res) => {
       name,
       city,
       state,
+      contact,
       country,
       streetAndHouseNo,
     });

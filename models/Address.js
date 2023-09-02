@@ -8,6 +8,11 @@ const addressSchema = new mongoose.Schema ({
      type:String, 
      trim:true
     }, 
+    contact:{
+     type:String , 
+     required:true, 
+     trim:true
+    }, 
     state:{
      type:String, 
      trim:true
