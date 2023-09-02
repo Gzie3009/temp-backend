@@ -166,7 +166,7 @@ exports.addAddress = async (req, res) => {
       })
     }
     // then 
-    const createdAddress = await Address.create({ name, state, country, streetAndHouseNo });
+    const createdAddress = await Address.create({ name,city, state, country, streetAndHouseNo });
     const updatedUser = await User.findByIdAndUpdate(userId, {
       $push: { addresses: createdAddress._id }
     });
