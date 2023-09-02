@@ -48,7 +48,14 @@ exports.createOrder = async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(userId, {
         $push: { orders: orderUpdated._id }
       })
-      const order = await Order.findById(orderCreated._id).populate("products"); 
+      const order = await Order.findById(orderCreated._id).populate([{
+        path:"products", 
+        populate:{
+          "path":"productId"
+        }
+      }
+
+      ]); 
        
       return res.status(200).json({
         success: true,
@@ -104,7 +111,14 @@ exports.createOrder = async (req, res) => {
       const orderUpdate = await Order.findByIdAndUpdate(orderCreated._id,{
         amount:price
       });
-      const order = await Order.findById(orderCreated._id).populate("products"); 
+      const order = await Order.findById(orderCreated._id).populate([{
+        path:"products", 
+        populate:{
+          "path":"productId"
+        }
+      }
+
+      ]); 
       return res.status(200).json({
         success: true,
         message: "all product added successfully",
