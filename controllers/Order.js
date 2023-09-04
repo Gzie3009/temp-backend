@@ -201,7 +201,7 @@ exports.getAllAddress = async (req, res) => {
     return res.status(200).json({
       sucess: true,
       message: "Addresses are in data",
-      data: [Useraddresses.addresses],
+      data: Useraddresses.addresses,
     });
   } catch (err) {
     console.log(err);
