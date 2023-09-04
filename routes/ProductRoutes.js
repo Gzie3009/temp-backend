@@ -25,10 +25,12 @@ const {
   searchProduct,
   removeFromWishlist,
   getProductWithoutAuth,
-  filter
+
+  filter , 
+  getCategory 
 } = require("../controllers/Product");
-router.post("/add-product", auth, addProduct); //checked
-router.post("/add-category", auth, addCategory); // checked
+router.post("/add-product",addProduct); //checked
+router.post("/add-category", addCategory); // checked
 router.delete("/delete-product", auth, deleteProduct); // checked
 router.get("/all-products", getAllProducts); // checked
 router.put("/update-price", auth, changePrice); // checked
@@ -51,5 +53,6 @@ router.post("/search/:key", searchProduct);
 router.post("/remove-from-wishlist/:id", auth, removeFromWishlist);
 router.post("/no-auth/:id", getProductWithoutAuth);
 router.post("/filter",filter);
+router.post("/categories",getCategory);
 
 module.exports = router;

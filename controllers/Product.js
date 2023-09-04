@@ -21,39 +21,75 @@ const { uploadImagetoCloudinary } = require("../utils/ImageUploader");
 // add product
 exports.addProduct = async (req, res) => {
   try {
-    const { name, description, category, price, offerprice, status} = req.body;
-    const userId = req.user.id;
-    console.log(userId);
-    availble = true;
-    if (status) {
-      availble = status;
-    }
-    const newProduct = await Product.create({
-      name,
+    const {
+      title,
       description,
       category,
+      ocassion,
+      collectionName,
+      material,
+      fabric,
+      tags,
+      color,
+      customization,
+      work,
+      sku,
       price,
-      offerprice,
-      availability: availble,
-    });
-    // adding new product
-    // add the product to the respective category
-    const updatedCategory = await Category.findByIdAndUpdate(
+    } = req.body;
+    // switch (true) {
+    //   case !title:
+    //     return res.status(500).send({ error: "Name is Required" });
+    //   case !description:
+    //     return res.status(500).send({ error: "Description is Required" });
+    //   case !ocassion:
+    //     return res.status(500).send({ error: "Ocassion is Required" });
+    //   case !price:
+    //     return res.status(500).send({ error: "Price is Required" });
+    //   case !category:
+    //     return res.status(500).send({ error: "Category is Required" });
+    //   case !color:
+    //     return res.status(500).send({ error: "Color is Required" });
+    //   case !collectionName:
+    //     return res.status(500).send({ error: "CollectionName is Required" });
+    //   case !fabric:
+    //     return res.status(500).send({ error: "Fabric is Required" });
+    //   case !material:
+    //     return res.status(500).send({ error: "Material is Required" });
+    //   case !work:
+    //     return res.status(500).send({ error: "Work is Required" });
+    //   case !sku:
+    //     return res.status(500).send({ error: "Sku is Required" });
+    //   case !tags:
+    //     return res.status(500).send({ error: "Tags is Required" });
+    //   case !customization:
+    //     return res.status(500).send({ error: "Customization is Required" });
+    // }
+    // const tagsArray = req.fields.Tags.split(',').map((Tag) => Tag.trim());
+    const newListing = await  Product.create({
+      title,
+      description,
       category,
-      { $push: { products: newProduct._id } },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json({
+      ocassion,
+      collectionName,
+      material,
+      fabric,
+      tags,
+      color,
+      customization,
+      work,
+      sku,
+      price,
+    }) ;
+    res.status(200).send({
       success: true,
-      message: "Product added Successfully",
+      message: "Listing added Successfully",
+      newListing,
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
-      message: "Something went wrong while adding product",
+      message: "Something went wrong while adding Listing",
     });
   }
 };
@@ -805,3 +841,21 @@ const products = await Product.find(filter);
     });
   }
 };
+exports.getCategory = async(req , res)=>{
+   try{
+    const categories = Category.find({}); 
+    return res.status(200).json({
+      success:true, 
+      message:"done ", 
+      categories
+    })
+   }
+   catch(err){
+    console.log(err); 
+    return res.status(500).json({
+      success:false , 
+      message:"error while cateing"
+    })
+   } 
+
+}
