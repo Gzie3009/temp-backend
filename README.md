@@ -33,7 +33,7 @@ local Route : /product
 
 Type of Request   Path , purpose 
 Post , /add-product , to add ~the product 
-Post , /add-category, to add the categories of the product 
+Post , /add-categoary, to add the categories of the product 
 Get  , /all-products, to get all the added products 
 Post , /add-to-cart, to put  the product into the cart 
 Post , /remove-from-cart:id to remove the item from the cart 

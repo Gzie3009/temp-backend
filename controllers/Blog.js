@@ -6,7 +6,7 @@ exports.getAllBlog = async(req, res)=>{
          
     const result = await Blog.find({}); 
     console.log(result);
-
+  
     return res.status(200).json({
         success:true, 
         message:"Succesfully fetched", 
@@ -53,21 +53,23 @@ exports.createBlog = async(req, res)=>{
     try{
        const {author, title , content , createdAt} = req.body ; 
        
-       const img = req.files.blogImg ; 
+     
+    //    const img = req.files.blogImg ; 
       
-      const imageUpload = await uploadImagetoCloudinary(img);
-      const url = imageUpload.secure_url; 
+    //   const imageUpload = await uploadImagetoCloudinary(img);
+    //   const url = imageUpload.secure_url; 
       
       const createdBlog = await Blog.create({
         author:author, 
         title:title, 
         content:content, 
-        imageUrl:url , 
+        // imageUrl:url, 
       })
       
       return res.status(200).json({
         success:true, 
-        message:"created"
+        message:"created",
+        createdBlog
       })
     }
     catch(err){

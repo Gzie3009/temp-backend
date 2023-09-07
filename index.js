@@ -11,9 +11,12 @@ const blogRoutes = require("./routes/BlogRoutes");
 const contactRouter = require("./routes/ContactRouter");
 const cors = require("cors");
 
+
 require("dotenv").config();
 app.use(express.json());
 app.use(cookieParser());
+app.use(fileUpload());
+// ...
 const allowedOrigins = [
   "https://ikonikbez.com",
   "https://ikonikbez.vercel.app",
@@ -42,6 +45,10 @@ app.use(
 );
 dbConnect();
 clouldinaryConnect();
+app.use(express.urlencoded({
+  extended: true
+}));
+
 app.use("/api/v1/auth", entryRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoutes);

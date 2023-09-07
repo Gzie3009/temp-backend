@@ -1,8 +1,11 @@
+
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 const User = require("../models/User");
 const CartItem = require("../models/CartItem");
 const ImageColor = require("../models/ImageColor");
+const upload = require("../utils/multer");
+
 const { uploadImagetoCloudinary } = require("../utils/ImageUploader");
 
 // exports.checkCart = async(req , res) =>{
@@ -97,7 +100,7 @@ exports.addProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   try {
     const allProducts = await Product.find({})
-      .populate("category")
+      // .populate("category")
       .populate("photos");
     // populate("RatingAndReviews")
 
@@ -110,7 +113,7 @@ exports.getAllProducts = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Products fetched successfully",
-      data: allProducts,
+      products :[allProducts]
     });
   } catch (err) {
     console.log(err);
@@ -263,38 +266,21 @@ exports.changePrice = async (req, res) => {
   }
 };
 
-exports.putImage = async (req, res) => {
-  try {
-    const { productId, color } = req.body;
-    const image = req.files.productImage;
 
-    const productDetails = await Product.findById(productId); 
-    if(!productDetails)
-    {
-      return res.status(404).json({
-        success:false , 
-        message:"No such product Found"
-      })
-    }
-    const imageUpload = await uploadImagetoCloudinary(image);
-    const url = imageUpload.secure_url;
 
-    const ImageSaved = await ImageColor.create({ url, color, productId });
-    const dbEntry = await Product.findByIdAndUpdate(productId, {
-      $push: { photos: ImageSaved._id },
-    });
-    return res.status(200).json({
-      success: true,
-      message: "Image Uploaded Successfully",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong while adding pictures",
-    });
+exports.addImage = async(req ,res)=>{
+  try{
+     
   }
-};
+  catch(err){
+    console.log(err);
+    return res.status(500).json({
+      success:false , 
+      message:"error while adding image "
+    })
+  }
+}
+
 exports.getImageOfColor = async (req, res) => {
   try {
     const { inputColor, prdId } = req.body;
@@ -843,7 +829,8 @@ const products = await Product.find(filter);
 };
 exports.getCategory = async(req , res)=>{
    try{
-    const categories = Category.find({}); 
+    const categories = await Category.find({}).select('name description'); 
+    
     return res.status(200).json({
       success:true, 
       message:"done ", 

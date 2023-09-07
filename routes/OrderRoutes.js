@@ -8,7 +8,7 @@ router.post("/all-addresses",auth,getAllAddress); // tested
 router.post("/order-details",auth,getOrderDeatils); //tested
 router.post("/add-address",auth,addAddress); // tested
 router.post("/create-order",auth,createOrder); // tested
-router.post("/addAddressToOrder",auth,addAddressToOrder); //tested
-router.post("/get-orders",auth , getOrders);
+router.post("/addAddressToOrder",addAddressToOrder); //tested
+router.post("/get-orders", getOrders);
 module.exports = router ;
 
