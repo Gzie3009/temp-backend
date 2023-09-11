@@ -32,7 +32,9 @@ const {
   getProductWithoutAuth,
   addImageToProduct,
   filter , 
-  getCategory 
+  getCategory , 
+  addCustom, 
+  getCustomization
 } = require("../controllers/Product");
 
 
@@ -62,5 +64,8 @@ router.post("/no-auth/:id", getProductWithoutAuth);
 router.post("/filter",filter);
 router.post("/categories",getCategory);
 
+
 router.post("/add-image",addImageToProduct);
+router.post("/customs",getCustomization); 
+router.post("/add-custom",addCustom)
 module.exports = router;

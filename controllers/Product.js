@@ -3,6 +3,7 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const User = require("../models/User");
 const CartItem = require("../models/CartItem");
+const Customization = require("../models/Customization");
 const ImageColor = require("../models/ImageColor");
 const formidable = require("formidable")
 
@@ -46,7 +47,8 @@ console.log("product id", productId);
 return res.status(200).json({
   sucess:true, 
   message:'Succesfully added img', 
-  imgColor
+  imgColor, 
+  img_url:url,
 })
   }  
   catch(err){
@@ -89,6 +91,8 @@ exports.addProduct = async (req, res) => {
       sku,
       price,
     } = req.body;
+    console.log("The category prd" ,category);
+    
     // switch (true) {
     //   case !title:
     //     return res.status(500).send({ error: "Name is Required" });
@@ -133,6 +137,9 @@ exports.addProduct = async (req, res) => {
       sku,
       price,
     }) ;
+    const addedProduct = await Category.findByIdAndUpdate(category,{
+      $push:{products:newListing._id }
+    })
     res.status(200).send({
       success: true,
       message: "Listing added Successfully",
@@ -686,6 +693,7 @@ exports.deleteCategory = async (req, res) => {
 exports.allProductsOfCategory = async (req, res) => {
   try {
     const { categoryId } = req.body;
+    console.log(categoryId);
     // create the catefory
     if (!categoryId) {
       return res.status(404).json({
@@ -693,9 +701,8 @@ exports.allProductsOfCategory = async (req, res) => {
         message: "Categtory id required",
       });
     }
-    const categoryProducts = await Product.find({
-      category: categoryId,
-    });
+    const categoryProducts = await Category.findById(categoryId).populate("products"); 
+    
 
     return res.status(200).json({
       success: true,
@@ -883,5 +890,45 @@ exports.getCategory = async(req , res)=>{
       message:"error while cateing"
     })
    } 
+
+}
+
+
+exports.addCustom = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    // create the catefory
+    const createdCustom = await Customization.create({
+      name,
+      description,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "created customization ",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "failed to create customization",
+    });
+  }
+};
+exports.getCustomization = async(req , res)=>{
+  try{
+   const customs = await Customization.find({}).select('name description'); 
+   
+   return res.status(200).json({
+     success:true, 
+     message:"done ", 
+     customs
+   })
+  }
+  catch(err){
+   console.log(err); 
+   return res.status(500).json({
+     success:false , 
+     message:"error while cateing"
+   })
+  } 
 
 }
