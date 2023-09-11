@@ -15,14 +15,19 @@ const cors = require("cors");
 require("dotenv").config();
 app.use(express.json());
 app.use(cookieParser());
-app.use(fileUpload());
+
 // ...
 const allowedOrigins = [
   "https://ikonikbez.com",
   "https://ikonikbez.vercel.app",
   "http://localhost:3000",
 ];
-
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp",
+  })
+);
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -37,17 +42,9 @@ app.use(
   })
 );
 
-app.use(
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "/tmp",
-  })
-);
+
 dbConnect();
 clouldinaryConnect();
-app.use(express.urlencoded({
-  extended: true
-}));
 
 app.use("/api/v1/auth", entryRoutes);
 app.use("/api/v1/product", productRoutes);

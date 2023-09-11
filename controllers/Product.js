@@ -4,9 +4,59 @@ const Category = require("../models/Category");
 const User = require("../models/User");
 const CartItem = require("../models/CartItem");
 const ImageColor = require("../models/ImageColor");
-const upload = require("../utils/multer");
+const formidable = require("formidable")
+
 
 const { uploadImagetoCloudinary } = require("../utils/ImageUploader");
+
+
+
+exports.addImageToProduct = async(req, res) =>{
+  try{
+
+  const form = new formidable.IncomingForm();
+  console.log("thered");
+
+  const {productId,color} = req.body ;
+  
+
+  const img = req.files.Image; 
+  console.log("the img",img);
+console.log("product id", productId);
+  const findProduct = await Product.findById(productId); 
+  
+  console.log(" The product is ", findProduct); 
+  if(!findProduct)
+  {
+    console.log("finded [rduct ");
+    return res.status(404).json({
+      success:false , 
+      message:"The product is not present"
+    })
+  }
+  const uploadImg = await uploadImagetoCloudinary(img);
+  const url = uploadImg.secure_url;
+  const imgColor = await ImageColor.create({
+    url , 
+    color
+  })
+  const updatedProduct = await Product.findByIdAndUpdate(productId,{
+    $push:{photos:imgColor._id}
+  })
+return res.status(200).json({
+  sucess:true, 
+  message:'Succesfully added img', 
+  imgColor
+})
+  }  
+  catch(err){
+    console.log(err); 
+    return res.status(500).json({
+      success:false , 
+      message:"Error while adding image"
+    })
+  }
+}
 
 // exports.checkCart = async(req , res) =>{
 //   try{
@@ -268,18 +318,7 @@ exports.changePrice = async (req, res) => {
 
 
 
-exports.addImage = async(req ,res)=>{
-  try{
-     
-  }
-  catch(err){
-    console.log(err);
-    return res.status(500).json({
-      success:false , 
-      message:"error while adding image "
-    })
-  }
-}
+
 
 exports.getImageOfColor = async (req, res) => {
   try {
